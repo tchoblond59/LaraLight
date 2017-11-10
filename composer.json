@@ -1,0 +1,14 @@
+{
+    "name": "julien/laralight",
+    "description": "Auto switch on light system for LaraHome",
+    "type": "LaraHome",
+    "license": "GNU GPL",
+    "authors": [
+        {
+            "name": "Julien Lamandin",
+            "email": "julien.lamandin@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
