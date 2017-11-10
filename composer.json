@@ -9,6 +9,10 @@
             "email": "julien.lamandin@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Tchoblond59\\LaraLight\\": "src"
+        }
+    },
     "require": {}
 }
