@@ -21,4 +21,9 @@ class Period extends Model
     {
         return Carbon::createFromFormat('H:i:s', $value);
     }
+
+    public function laralightConfigs()
+    {
+        return $this->belongsToMany('Tchoblond59\LaraLight\Models\LaraLightConfig', '');
+    }
 }

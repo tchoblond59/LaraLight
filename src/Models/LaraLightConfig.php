@@ -29,4 +29,9 @@ class LaraLightConfig extends Model
     {
         return $this->hasMany('Tchoblond59\LaraLight\Models\PeriodConfig');
     }
+
+    public function periods()
+    {
+        return $this->belongsToMany('Tchoblond59\LaraLight\Models\Period', 'll_periods_configs', 'configuration_id', 'll_periods_levels_id');
+    }
 }
