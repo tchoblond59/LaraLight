@@ -13,14 +13,14 @@ class CreateLightLevelPeriods extends Migration
      */
     public function up()
     {
-        Schema::table('light_level_periods', function (Blueprint $table){
+        Schema::create('ll_periods_configs', function (Blueprint $table){
             $table->increments('id');
-            $table->integer('light_level')->unsigned();
-            $table->string('period_group', 255);
 
+            $table->integer('ll_periods_levels_id')->unsigned();
             $table->integer('configuration_id')->unsigned();
 
-            $table->foreign('configuration_id')->references('id')->on('laralight_configs');
+            $table->foreign('ll_periods_levels_id')->references('id')->on('ll_periods_levels');
+            $table->foreign('configuration_id')->references('id')->on('ll_configs');
         });
     }
 
@@ -31,6 +31,6 @@ class CreateLightLevelPeriods extends Migration
      */
     public function down()
     {
-        Schema::drop('light_level_periods');
+        Schema::drop('ll_periods_configs');
     }
 }

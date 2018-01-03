@@ -13,12 +13,11 @@ class CreatePeriods extends Migration
      */
     public function up()
     {
-        Schema::table('periods', function (Blueprint $table){
+        Schema::create('ll_periods_levels', function (Blueprint $table){
             $table->increments('id');
-            $table->integer('day_of_week')->unsigned();
             $table->time('from')->default('00:00:00');
             $table->time('to')->default('23:59:59');
-            $table->string('group', 255);
+            $table->integer('light_level')->unsigned();
         });
     }
 
@@ -29,6 +28,6 @@ class CreatePeriods extends Migration
      */
     public function down()
     {
-        Schema::drop('periods');
+        Schema::drop('ll_periods_levels');
     }
 }

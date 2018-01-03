@@ -1,6 +1,6 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">{{$widget->name}} <a href="{{url('/widget/laralight/'.$widget->id)}}"><i class="fa fa-cogs pull-right" aria-hidden="true"></i></a></h3>
+        <h3 class="panel-title">{{$widget->name}} <a href="{{url('/LaraLight/widget/'.$widget->id)}}"><i class="fa fa-cogs pull-right" aria-hidden="true"></i></a></h3>
     </div>
     <div class="panel-body">
         <form action="{{url('/LaraLight/action/setLevel')}}" method="post">
