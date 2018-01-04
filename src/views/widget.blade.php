@@ -7,9 +7,11 @@
             {{csrf_field()}}
             <input type="hidden" name="id" value="{{$widget->id}}">
             <input type="hidden" name="sensor_id" value="{{$sensor->id}}">
-            <input id="ex1" data-provide="slider" name="level"
+            <input data-provide="slider" name="level"
+                   data-sensor-id="{{$sensor->id}}"
                    data-slider-id='ex1Slider'
-                   type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="100"/>
+                   type="text" data-slider-min="0"
+                   data-slider-max="100" data-slider-step="1" data-slider-value="100"/>
         </form>
     </div>
 </div>

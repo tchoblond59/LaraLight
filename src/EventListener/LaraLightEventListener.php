@@ -7,6 +7,7 @@ use App\Sensor;
 use Carbon\Carbon;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Tchoblond59\LaraLight\Models\LaraLight;
 use Tchoblond59\LaraLight\Models\LaraLightConfig;
 
 class LaraLightEventListener
@@ -29,23 +30,31 @@ class LaraLightEventListener
      */
     public function handle(MSMessageEvent $event)
     {
-        $sensor = Sensor::where('node_address', '=', $event->message->getNodeId())->where('classname', '=', '\Tchoblond59\LaraLight\Models\LaraLight')->first();
-        if($sensor)
+        $sensor = LaraLight::where('node_address', '=', $event->message->getNodeId())->where('classname', '=', '\Tchoblond59\LaraLight\Models\LaraLight')->first();
+        if($sensor)//Sensor find in database
         {
-            $ll_config = LaraLightConfig::where('pir_sensor_id', '=', $sensor->id)->first();
+            $ll_config = LaraLightConfig::where('pir_sensor_id', '=', $sensor->id)->first();//Find config
             if($ll_config)//We are concern about the message
             {
                 $light_level = 100;
                 $now = Carbon::now();
-                \Log::info($now->format('H:i:s'));
                 $periods = $ll_config->periods()->where('from', '<=' ,$now->format('H:i:s'))->where('to', '>=', $now->format('H:i:s'));
-                if($periods->exists())
+                if($periods->exists())//Find specific level for now
                 {
                     $periods = $periods->first();
                     $light_level = $periods->light_level;
-                    \Log::info('We have a specified level: '. $periods->light_level);
+
+                }
+                if($ll_config->mode=='auto')//In auto mode
+                {
+                    $lux=0;
                     if($ll_config->loadLightSensorValue())
                         $lux = $ll_config->getLux();
+                    if($ll_config->lux_limit<$lux)//Luminosity of the room is under limit
+                    {
+                        //Trigger the light
+                        $sensor->setLevel($light_level);
+                    }
                 }
             }
         }

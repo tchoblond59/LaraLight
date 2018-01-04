@@ -14,6 +14,8 @@ class LaraLightConfig extends Model
 
     private $lux = 0;
 
+    protected $dates = ['on_since'];
+
     public function sensor()
     {
         return $this->belongsTo('App\Sensor', 'relay_id');

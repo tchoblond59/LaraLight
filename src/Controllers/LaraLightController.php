@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 
 use App\ScheduledMSCommands;
 use App\Widget;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Sensor;
 use App\Mqtt\MSMessage;
 use App\Mqtt\MqttSender;
 use App\Message;
 use App\MSCommand;
+use Tchoblond59\LaraLight\Events\LaraLightEvent;
+use Tchoblond59\LaraLight\Models\LaraLight;
 use Tchoblond59\LaraLight\Models\LaraLightConfig;
 use Tchoblond59\LaraLight\Models\Period;
 use Tchoblond59\LaraLight\Models\PeriodConfig;
@@ -150,6 +153,8 @@ class LaraLightController extends Controller
         $message->set($sensor->node_address, $sensor->sensor_address, 'V_PERCENTAGE',1);
         $message->setMessage($request->level);
         MqttSender::sendMessage($message);
+        $event = new LaraLightEvent($sensor, $request->level);
+        event($event);
         return json_encode($request->all());
     }
 }

@@ -12,6 +12,10 @@ namespace Tchoblond59\LaraLight\Models;
 use App\Sensor;
 use App\Message;
 use DB;
+use App\Mqtt\MSMessage;
+use App\Mqtt\MqttSender;
+use Tchoblond59\LaraLight\Events\LaraLightEvent;
+use Carbon\Carbon;
 
 class LaraLight extends Sensor
 {
@@ -41,7 +45,7 @@ class LaraLight extends Sensor
 
     public function getJs()
     {
-        return ['js/bootstrap-slider.js'];
+        return ['js/bootstrap-slider.js', 'js/tchoblond59/laralight/laralight.js'];
     }
     public function getWidgetList()
     {
@@ -51,5 +55,27 @@ class LaraLight extends Sensor
     public function onDelete()
     {
 
+    }
+
+    public function setLevel($level)
+    {
+        $message = new MSMessage($this->id);
+        $message->set($this->node_address, $this->sensor_address, 'V_PERCENTAGE',1);
+        $message->setMessage($level);
+        MqttSender::sendMessage($message);
+
+        $config = $this->config;
+        $config->on_since = Carbon::now();
+        $config->state = $level;
+        $config->save();
+
+        $event = new LaraLightEvent($this, $level);
+        event($event);
+
+    }
+
+    public function config()
+    {
+        return $this->hasOne('Tchoblond59\LaraLight\Models\LaraLightConfig', 'relay_id');
     }
 }
