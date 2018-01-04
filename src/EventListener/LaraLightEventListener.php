@@ -35,9 +35,18 @@ class LaraLightEventListener
             $ll_config = LaraLightConfig::where('pir_sensor_id', '=', $sensor->id)->first();
             if($ll_config)//We are concern about the message
             {
+                $light_level = 100;
                 $now = Carbon::now();
                 \Log::info($now->format('H:i:s'));
-                \Log::info($ll_config->periods()->where('from', '<=' ,$now->format('H:i:s'))->where('to', '>=', $now->format('H:i:s'))->get());
+                $periods = $ll_config->periods()->where('from', '<=' ,$now->format('H:i:s'))->where('to', '>=', $now->format('H:i:s'));
+                if($periods->exists())
+                {
+                    $periods = $periods->first();
+                    $light_level = $periods->light_level;
+                    \Log::info('We have a specified level: '. $periods->light_level);
+                    if($ll_config->loadLightSensorValue())
+                        $lux = $ll_config->getLux();
+                }
             }
         }
     }
