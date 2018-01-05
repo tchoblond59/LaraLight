@@ -23,24 +23,16 @@ class LaraLight extends Sensor
     {
         $sensor  = $widget->sensor;
         $state = 0;
-        $last_message = Message::where('node_address', '=', $sensor->node_address)
-            ->where('sensor_address', '=', $sensor->sensor_address)
-            ->orderBy('created_at', 'desc')->first();
-
-        if($last_message!=null)
-        {
-            $state = $last_message->value;
-        }
-
+        $ll_config = LaraLightConfig::where('relay_id', '=', $sensor->id)->first();
         return view('laralight::widget')->with(['widget' => $widget,
-        'sensor' => $sensor,
-        'state' => $state,
+            'sensor' => $sensor,
+            'll_config' => $ll_config,
         ]);
     }
 
     public function getCss()
     {
-        return ['css/bootstrap-slider.css'];
+        return ['css/bootstrap-slider.css', 'css/tchoblond59/laralight/laralight.css'];
     }
 
     public function getJs()

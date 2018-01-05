@@ -11,13 +11,13 @@
                    data-sensor-id="{{$sensor->id}}"
                    data-slider-id='ex1Slider'
                    type="text" data-slider-min="0"
-                   data-slider-max="100" data-slider-step="1" data-slider-value="100"/>
+                   data-slider-max="100" data-slider-step="1" data-slider-value="{{$ll_config->state}}"/>
         </form>
     </div>
 </div>
 <script>
     $(function() {
-        $('input[data-provide]').change(function () {
+        $('input[data-provide]').on('slideStop', function () {
             var form = $(this).closest('form');
             $.ajax({
                 type: form.attr('method'),

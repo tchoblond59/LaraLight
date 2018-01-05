@@ -16,6 +16,7 @@ class LaraLightServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/assets/js' => public_path('/js/tchoblond59/laralight'),
+            __DIR__.'/assets/css' => public_path('/css/tchoblond59/laralight'),
         ], 'larahome-package');
         $this->loadRoutesFrom(__DIR__.'/routes.php');
         $this->loadMigrationsFrom(__DIR__.'/migrations');
