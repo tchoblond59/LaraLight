@@ -32,6 +32,7 @@ class LaraLightController extends Controller
         $widget = Widget::findOrFail($id);
         $sensor = $widget->sensor;
         $laralight_configs = LaraLightConfig::all();
+        $config = LaraLightConfig::where('relay_id', '=', $sensor->id)->first();
         $sub_view = 'laralight::config_table';
         $state = 'config';
         if($request->has('tab'))
@@ -43,6 +44,7 @@ class LaraLightController extends Controller
             'laralight_configs' => $laralight_configs,
             'sub_view' => $sub_view,
             'state' => $state,
+            'll_config' => $config
             ]);
     }
 
@@ -92,6 +94,7 @@ class LaraLightController extends Controller
             'periods_configs' => $periods_config,
             'sub_view' => $sub_view,
             'state' => $state,
+            'll_config' => $config
         ]);
 
     }
@@ -100,6 +103,7 @@ class LaraLightController extends Controller
     {
         $widget = Widget::findOrFail($id);
         $sensor = $widget->sensor;
+        $config = LaraLightConfig::where('relay_id', '=', $sensor->id)->first();
         $sub_view = 'laralight::periods';
         $periods = Period::all();
         $state = 'periods';
@@ -109,6 +113,7 @@ class LaraLightController extends Controller
             'periods' => $periods,
             'sub_view' => $sub_view,
             'state' => $state,
+            'll_config' => $config
         ]);
 
     }
@@ -157,5 +162,26 @@ class LaraLightController extends Controller
         event($event);*/
         $sensor->setLevel($request->level);
         return json_encode($request->all());
+    }
+
+    public function postConfiguration($id, Request $request)
+    {
+        $this->validate($request, [
+            'mode' => 'required',
+            'lux_limit' => 'required|numeric',
+            'delay' => 'required|numeric',
+            'lux_sensor' => 'required|exists:sensors,id',
+            'pir_sensor' => 'required|exists:sensors,id',
+        ]);
+        $widget = Widget::findOrFail($id);
+        $sensor = $widget->sensor;
+        $config = LaraLightConfig::where('relay_id', '=', $sensor->id)->first();
+        $config->mode = $request->mode;
+        $config->lux_limit = $request->lux_limit;
+        $config->delay = $request->delay;
+        $config->light_sensor_id = $request->lux_sensor;
+        $config->pir_sensor_id = $request->pir_sensor;
+        $config->save();
+        return redirect()->back();
     }
 }
