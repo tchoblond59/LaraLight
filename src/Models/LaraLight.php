@@ -74,7 +74,7 @@ class LaraLight extends Sensor
         $config->state = $level;
         $config->save();
 
-        $event = new LaraLightEvent($this, $level);
+        $event = new LaraLightEvent($this, $level, $config);
         event($event);
 
     }

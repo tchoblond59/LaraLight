@@ -10,6 +10,8 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Tchoblond59\LaraLight\Models\LaraLight;
+use Tchoblond59\LaraLight\Models\LaraLightConfig;
 
 class LaraLightEvent implements ShouldBroadcast
 {
@@ -23,11 +25,13 @@ class LaraLightEvent implements ShouldBroadcast
 
     public $level=0;
     public $sensor;
+    public $config;
 
-    public function __construct(Sensor $sensor, $level)
+    public function __construct(Sensor $sensor, $level, LaraLightConfig $config)
     {
         $this->sensor = $sensor;
         $this->level = $level;
+        $this->config = $config;
     }
 
     /**

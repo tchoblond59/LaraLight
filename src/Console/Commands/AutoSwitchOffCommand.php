@@ -45,7 +45,7 @@ class AutoSwitchOffCommand extends Command
     {
         \Log::useFiles(storage_path('/logs/laralight.log'), 'info');
         \Log::info('AutoSwitchOff');
-        $ll_configs = LaraLightConfig::where('mode', LaraLightMode::Auto)->get();
+        $ll_configs = LaraLightConfig::where('mode', LaraLightMode::Auto)->where('state', '!=', '0')->get();
         foreach ($ll_configs as $config)
         {
             $now = Carbon::now();

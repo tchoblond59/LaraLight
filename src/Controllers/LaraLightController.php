@@ -16,6 +16,7 @@ use App\MSCommand;
 use Tchoblond59\LaraLight\Events\LaraLightEvent;
 use Tchoblond59\LaraLight\Models\LaraLight;
 use Tchoblond59\LaraLight\Models\LaraLightConfig;
+use Tchoblond59\LaraLight\Models\LaraLightMode;
 use Tchoblond59\LaraLight\Models\Period;
 use Tchoblond59\LaraLight\Models\PeriodConfig;
 use Tchoblond59\LaraLight\Models\PeriodLevel;
@@ -182,6 +183,29 @@ class LaraLightController extends Controller
         $config->light_sensor_id = $request->lux_sensor;
         $config->pir_sensor_id = $request->pir_sensor;
         $config->save();
+        $event = new LaraLightEvent($sensor, $config->state, $config);
+        event($event);
         return redirect()->back();
+    }
+
+    public function updateMode(Request $request)
+    {
+        $this->validate($request, [
+            'id' => 'required|exists:widgets',
+            'sensor_id' => 'required|exists:sensors,id',
+        ]);
+        $widget = Widget::findOrFail($request->id);
+        $sensor = LaraLight::findOrFail($widget->sensor_id);
+        $config = $sensor->config;
+        if($config->mode == LaraLightMode::Auto)
+            $config->mode = LaraLightMode::Manual;
+        else if($config->mode == LaraLightMode::Manual)
+            $config->mode = LaraLightMode::TimeOnly;
+        else if($config->mode == LaraLightMode::TimeOnly)
+            $config->mode = LaraLightMode::Auto;
+        $config->save();
+        $event = new LaraLightEvent($sensor, $config->state, $config);
+        event($event);
+        return json_encode('ok');
     }
 }

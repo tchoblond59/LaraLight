@@ -30,9 +30,21 @@
                                 <label class="col-md-4 control-label" for="mode">Mode</label>
                                 <div class="col-md-4">
                                     <select id="mode" name="mode" class="form-control">
-                                        <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::Manual}}">Manuel</option>
-                                        <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::Auto}}">Automatique</option>
-                                        <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::TimeOnly}}">Basé sur l'heure de la journée</option>
+                                        @if($ll_config->mode == \Tchoblond59\LaraLight\Models\LaraLightMode::Manual)
+                                            <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::Manual}}" selected>Manuel</option>
+                                        @else
+                                            <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::Manual}}">Manuel</option>
+                                        @endif
+                                        @if($ll_config->mode == \Tchoblond59\LaraLight\Models\LaraLightMode::Auto)
+                                            <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::Auto}}" selected>Automatique</option>
+                                        @else
+                                            <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::Auto}}">Automatique</option>
+                                        @endif
+                                        @if($ll_config->mode == \Tchoblond59\LaraLight\Models\LaraLightMode::TimeOnly)
+                                            <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::TimeOnly}}" selected>Basé sur l'heure de la journée</option>
+                                        @else
+                                            <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::TimeOnly}}">Basé sur l'heure de la journée</option>
+                                        @endif
                                     </select>
                                 </div>
                             </div>

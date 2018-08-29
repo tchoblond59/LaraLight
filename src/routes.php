@@ -8,4 +8,5 @@
         Route::get('/LaraLight/widget/periodConfig/{id}','Tchoblond59\LaraLight\Controllers\LaraLightController@periodConfig');
         Route::post('/LaraLight/config/assignPeriod','Tchoblond59\LaraLight\Controllers\LaraLightController@assignPeriod');
         Route::post('/LaraLight/widget/configuration/{id}','Tchoblond59\LaraLight\Controllers\LaraLightController@postConfiguration');
+        Route::post('/LaraLight/mode/update','Tchoblond59\LaraLight\Controllers\LaraLightController@updateMode');
 });
