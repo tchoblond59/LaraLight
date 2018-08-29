@@ -53,8 +53,11 @@ class LaraLightEventListener
                 {
                     $lux=0;
                     if($ll_config->loadLightSensorValue())
+                    {
                         $lux = $ll_config->getLux();
-                    if($ll_config->lux_limit<$lux)//Luminosity of the room is under limit
+                        \Log::info('Actual lux of room is '.$lux.' lux');
+                    }
+                    if($ll_config->lux_limit>=$lux)//Luminosity of the room is under limit
                     {
                         //Trigger the light
                         $sensor->setLevel($light_level);
