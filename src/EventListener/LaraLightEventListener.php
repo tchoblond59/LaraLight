@@ -31,6 +31,7 @@ class LaraLightEventListener
     public function handle(MSMessageEvent $event)
     {
         \Log::useFiles(storage_path('/logs/laralight.log'), 'info');
+        $event->message->getType();
         $sensor = LaraLight::where('node_address', '=', $event->message->getNodeId())->where('classname', '=', '\Tchoblond59\LaraLight\Models\LaraLight')->first();
         \Log::info('event message received from node '.$event->message->getNodeId());
         if($sensor)//Sensor find in database
@@ -70,5 +71,11 @@ class LaraLightEventListener
                 }
             }
         }
+    }
+
+    //Handle when the light level change
+    public function onLevelChange()
+    {
+
     }
 }
