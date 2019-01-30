@@ -1,8 +1,8 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">{{$widget->name}} <a href="{{url('/LaraLight/widget/'.$widget->id)}}"><i class="fa fa-cogs pull-right" aria-hidden="true"></i></a></h3>
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title">{{$widget->name}} <a href="{{url('/LaraLight/widget/'.$widget->id)}}"><i class="fa fa-cogs pull-right" aria-hidden="true"></i></a></h5>
     </div>
-    <div class="panel-body" data-sensor-id="{{$sensor->id}}">
+    <div class="card-body" data-sensor-id="{{$sensor->id}}">
         <form action="{{url('/LaraLight/action/setLevel')}}" method="post">
             {{csrf_field()}}
             <input type="hidden" name="id" value="{{$widget->id}}">

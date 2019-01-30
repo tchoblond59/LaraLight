@@ -2,7 +2,7 @@
     "name": "tchoblond59/laralight",
     "description": "Auto switch on light system for LaraHome",
     "type": "LaraHome",
-    "license": "GNU GPL",
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Julien Lamandin",
