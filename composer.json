@@ -14,5 +14,13 @@
             "Tchoblond59\\LaraLight\\": "src"
         }
     },
-    "require": {}
+    "require": {},
+    "extra": {
+	"laravel": {
+	    "providers": [
+		"Tchoblond59\\LaraLight\\LaraLightServiceProvider"
+	    ]
+	}
+    }
+
 }
