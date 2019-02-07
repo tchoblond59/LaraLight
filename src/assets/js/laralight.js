@@ -1,7 +1,7 @@
 /****************LaraLight JS Plugin****************/
 $(function() {
     e.channel('chan-laralight')
-        .listen('.Tchoblond59.LaraLight.Events.LaraLightEvent', function (e) {
+        .listen('.Tchoblond59\\LaraLight\\Events\\LaraLightEvent', function (e) {
             console.log('LaraLightEvent', e);
             $('input[data-sensor-id='+e.sensor.id+']').slider('setValue', e.level);
             $('div[data-sensor-id='+e.sensor.id+'] button.mode').text('Mode '+capitalize(e.config.mode))
