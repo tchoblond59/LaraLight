@@ -43,9 +43,13 @@ class AutoSwitchOffCommand extends Command
      */
     public function handle()
     {
-        \Log::useFiles(storage_path('/logs/laralight.log'), 'info');
-        \Log::info('AutoSwitchOff');
-        $ll_configs = LaraLightConfig::where('mode', LaraLightMode::Auto)->where('state', '!=', '0')->get();
+        //AutoSwitch off light after X minutes elipsed
+        $ll_configs = LaraLightConfig::where('state', '!=', '0')
+            ->where(function ($query){
+                $query->orWhere('mode', LaraLightMode::Auto)
+                    ->orWhere('mode', LaraLightMode::TimeOnly);
+            })
+            ->get();
         foreach ($ll_configs as $config)
         {
             $now = Carbon::now();
@@ -53,12 +57,9 @@ class AutoSwitchOffCommand extends Command
 
             if($diff_in_minutes>=$config->delay)//Delay is passed from last detection
             {
-                \Log::info('Delay is passed, diff in minutes is '.$diff_in_minutes);
                 $laralight = SensorFactory::create($config->sensor->classname, $config->sensor->id);
                 $laralight->setLevel(0);
-                \Log::info('Switch OFF '.$config->sensor->id);
-                \Log::info('Switch OFF '.$config->sensor->classname);
-                //\Log::info('Switch OFF '.$laralight->id);
+                \Log::info('Switch OFF '.$config->sensor->name);
             }
         }
     }

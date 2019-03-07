@@ -64,6 +64,7 @@ class LaraLight extends Sensor
 
     public function setLevel($level)
     {
+        \Log::info('Set light level to '.$level.' for sensor '.$this->name);
         $message = new MSMessage($this->id);
         $message->set($this->node_address, $this->sensor_address, 'V_PERCENTAGE',1);
         $message->setMessage($level);
@@ -82,5 +83,36 @@ class LaraLight extends Sensor
     public function config()
     {
         return $this->hasOne('Tchoblond59\LaraLight\Models\LaraLightConfig', 'relay_id');
+    }
+
+    public function pirTriggered()
+    {
+        $ll_config = $this->config;
+        $light_level = 100;
+        $now = Carbon::now();
+        $periods = $ll_config->periods()->where('from', '<=' ,$now->format('H:i:s'))->where('to', '>=', $now->format('H:i:s'));
+        if($periods->exists())//Find specific level for now
+        {
+            $periods = $periods->first();
+            $light_level = $periods->light_level;
+        }
+        if($ll_config->mode=='auto')//In auto mode
+        {
+            $lux=0;
+            if($ll_config->loadLightSensorValue())
+            {
+                \Log::info('No lux data for sensor '.$this->name);
+                $lux = $ll_config->getLux();
+            }
+            if($ll_config->lux_limit>=$lux)//Luminosity of the room is under limit
+            {
+                //Trigger the light
+                $this->setLevel($light_level);
+            }
+        }
+        else if($ll_config->mode == 'time' && $periods->exists())
+        {
+            $this->setLevel($light_level);
+        }
     }
 }

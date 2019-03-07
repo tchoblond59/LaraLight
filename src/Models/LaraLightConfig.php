@@ -18,7 +18,7 @@ class LaraLightConfig extends Model
 
     public function sensor()
     {
-        return $this->belongsTo('App\Sensor', 'relay_id');
+        return $this->belongsTo('Tchoblond59\LaraLight\Models\LaraLight', 'relay_id');
     }
 
     public function pir_sensor()

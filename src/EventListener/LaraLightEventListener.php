@@ -30,44 +30,21 @@ class LaraLightEventListener
      */
     public function handle(MSMessageEvent $event)
     {
-        \Log::useFiles(storage_path('/logs/laralight.log'), 'info');
-        $event->message->getType();
-        $sensor = LaraLight::where('node_address', '=', $event->message->getNodeId())->where('classname', '=', '\Tchoblond59\LaraLight\Models\LaraLight')->first();
-        \Log::info('event message received from node '.$event->message->getNodeId());
-        if($sensor)//Sensor find in database
+        if($event->message->getType() == 16 && $event->message->getMessage()==1)//V_TRIPPED type for pir sensor
         {
-            $ll_config = LaraLightConfig::where('pir_sensor_id', '=', $sensor->id)->first();//Find config
-            if($ll_config)//We are concern about the message
+            //Get the pir sensor
+            $pir_sensor = Sensor::where('node_address', $event->message->getNodeId())
+                ->where('sensor_address', $event->message->getChildId())
+                ->first();
+
+            if($pir_sensor != null)
             {
-                \Log::info('PIR sensor event message received from node '.$event->message->getNodeId());
-                $light_level = 100;
-                $now = Carbon::now();
-                $periods = $ll_config->periods()->where('from', '<=' ,$now->format('H:i:s'))->where('to', '>=', $now->format('H:i:s'));
-                if($periods->exists())//Find specific level for now
+                //Find all config that have this pir_sensor_id
+                $configs = LaraLightConfig::where('pir_sensor_id', $pir_sensor->id)->get();
+                foreach ($configs as $config)//Trigger all laralight
                 {
-                    $periods = $periods->first();
-                    $light_level = $periods->light_level;
-                    \Log::info('Specific light level find for this period: '.$light_level.'%');
-                }
-                \Log::info('Sensor mode is '.$ll_config->mode);
-                if($ll_config->mode=='auto')//In auto mode
-                {
-                    $lux=0;
-                    if($ll_config->loadLightSensorValue())
-                    {
-                        $lux = $ll_config->getLux();
-                        \Log::info('Actual lux of room is '.$lux.' lux');
-                    }
-                    if($ll_config->lux_limit>=$lux)//Luminosity of the room is under limit
-                    {
-                        //Trigger the light
-                        $sensor->setLevel($light_level);
-                        \Log::info('Lux limit reached -> triggering light '.$ll_config->lux_limit.' lux');
-                    }
-                }
-                else if($ll_config->mode == 'time' && $periods->exists())
-                {
-                    $sensor->setLevel($light_level);
+                    $sensor = $config->sensor;
+                    $sensor->pirTriggered();
                 }
             }
         }
