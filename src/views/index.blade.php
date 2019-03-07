@@ -15,6 +15,7 @@
                     </ul>
                 </div>
             @endif
+        </div>
 
             <div class="row">
                 <div class="col-md-12">
@@ -23,11 +24,11 @@
                         <fieldset>
 
                             <!-- Form Name -->
-                            <legend>Form Name</legend>
+                            <legend></legend>
 
                             <!-- Select Basic -->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="mode">Mode</label>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="mode">Mode</label>
                                 <div class="col-md-4">
                                     <select id="mode" name="mode" class="form-control">
                                         @if($ll_config->mode == \Tchoblond59\LaraLight\Models\LaraLightMode::Manual)
@@ -50,8 +51,8 @@
                             </div>
 
                             <!-- Text input-->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="lux_limit">Lux Limit</label>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="lux_limit">Lux Limit</label>
                                 <div class="col-md-4">
                                     <input id="lux_limit" name="lux_limit" placeholder="250" class="form-control input-md" type="number" value="{{$ll_config->lux_limit}}">
                                     <span class="help-block">Limite de lux à partir de laquelle la lumière doit s'allumer</span>
@@ -59,8 +60,8 @@
                             </div>
 
                             <!-- Text input-->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="delay">Délai</label>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="delay">Délai</label>
                                 <div class="col-md-4">
                                     <input id="delay" name="delay" placeholder="1" class="form-control input-md" type="number" value="{{$ll_config->delay}}">
                                     <span class="help-block">Délai en minutes avant lequel la lumière s'eteint</span>
@@ -68,8 +69,8 @@
                             </div>
 
                             <!-- Select Basic -->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="lux_sensor">Capteur de lumière</label>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="lux_sensor">Capteur de lumière</label>
                                 <div class="col-md-4">
                                     <select id="lux_sensor" name="lux_sensor" class="form-control">
                                         @foreach(\App\Sensor::all() as $ze_sensor)
@@ -84,8 +85,8 @@
                             </div>
 
                             <!-- Select Basic -->
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="pir_sensor">Capteur de mouvement</label>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="pir_sensor">Capteur de mouvement</label>
                                 <div class="col-md-4">
                                     <select id="pir_sensor" name="pir_sensor" class="form-control">
                                         @foreach(\App\Sensor::all() as $ze_sensor)
@@ -111,24 +112,24 @@
                 <div class="col-md-12">
                     <h1>Configuration des périodes</h1>
                     <ul class="nav nav-tabs">
-                        <li class="{{ $state=='config' ? 'active' : '' }}"><a
+                        <li class="{{ $state=='config' ? 'active' : '' }} nav-link"><a
                                     href="{{url('LaraLight/widget/'.$widget->id)}}">LaraLight</a></li>
-                        <li class="{{ $state=='periods' ? 'active' : '' }}"><a
+                        <li class="{{ $state=='periods' ? 'active' : '' }} nav-link"><a
                                     href="{{url('LaraLight/widget/period/'.$widget->id)}}">Periode</a></li>
-                        <li class="{{ $state=='periods_configs' ? 'active' : '' }}"><a
+                        <li class="{{ $state=='periods_configs' ? 'active' : '' }} nav-link"><a
                                     href="{{url('LaraLight/widget/periodConfig/'.$widget->id)}}">Assignation période</a>
                         </li>
-                        <li role="presentation" class="dropdown">
+                        <li role="presentation" class="dropdown nav-link">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                                aria-haspopup="true" aria-expanded="false">
                                 Créer <span class="caret"></span>
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                <li><a href="#" data-toggle="modal" data-target="#modalLumiere">Lumière</a></li>
-                                <li><a href="#" data-toggle="modal" data-target="#modalPeriod">Période</a></li>
-                                <li><a href="#" data-toggle="modal" data-target="#modalAssignPeriod">Assigner
-                                        Période</a></li>
-                            </ul>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalLumiere">Lumière</a>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalPeriod">Période</a>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalAssignPeriod">Assigner
+                                        Période</a>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -144,9 +145,9 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
+                    <h4 class="modal-title">Créer une lumière</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Créer une lumière</h4>
                 </div>
                 <div class="modal-body">
                     <form method="post" action="{{url('/LaraLight/config/create')}}" id="modalLumiereForm">
@@ -199,9 +200,9 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
+                    <h4 class="modal-title">Créer une période</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Créer une période</h4>
                 </div>
                 <div class="modal-body">
                     <form method="post" action="{{url('/LaraLight/config/createPeriod')}}" id="modalPeriodForm">
@@ -232,9 +233,9 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
+                    <h4 class="modal-title">Assigner une période</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Assigner une période</h4>
                 </div>
                 <div class="modal-body">
                     <form method="post" action="{{url('/LaraLight/config/assignPeriod')}}" id="modalAssignPeriodForm">
