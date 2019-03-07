@@ -32,8 +32,29 @@ $(function() {
             }
         });
         e.preventDefault();
-    })
+    });
+
+    submitOnClick();
 });
+
+function submitOnClick()
+{
+    $('.laralight_btn_submit').click(function (e) {
+        var form_id = $(this).attr('form');
+        form_id = '#'+form_id;
+        var form = $(form_id);
+        $.ajax({
+            type: form.attr('method'),
+            url: form.attr('action'),
+            data: form.serialize(),
+            dataType: 'json',
+            success: function (data) {
+            }
+        });
+
+
+    });
+}
 
 function capitalize(s)
 {
