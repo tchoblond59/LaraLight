@@ -45,12 +45,12 @@ class LaraLight extends Sensor
 
     public function getCss()
     {
-        return ['css/bootstrap-slider.css', 'css/tchoblond59/laralight/laralight.css'];
+        return ['css/tchoblond59/laralight/laralight.css'];
     }
 
     public function getJs()
     {
-        return ['js/bootstrap-slider.js', 'js/tchoblond59/laralight/laralight.js'];
+        return ['js/tchoblond59/laralight/laralight.js'];
     }
     public function getWidgetList()
     {
