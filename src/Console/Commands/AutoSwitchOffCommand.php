@@ -2,6 +2,7 @@
 
 namespace Tchoblond59\LaraLight\Console\Commands;
 
+use App\Interfaces\CommandInterface;
 use App\Sensor;
 use App\SensorFactory;
 use Carbon\Carbon;
@@ -44,6 +45,7 @@ class AutoSwitchOffCommand extends Command
     public function handle()
     {
         //AutoSwitch off light after X minutes elipsed
+        \Log::info('AUTO OFF');
         $ll_configs = LaraLightConfig::where('state', '!=', '0')
             ->where(function ($query){
                 $query->orWhere('mode', LaraLightMode::Auto)

@@ -2,6 +2,7 @@
 
 namespace Tchoblond59\LaraLight;
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Event;
 use Tchoblond59\LaraLight\Console\Commands\AutoSwitchOffCommand;
@@ -29,6 +30,11 @@ class LaraLightServiceProvider extends ServiceProvider
         }
 
         Event::listen('App\Events\MSMessageEvent', '\Tchoblond59\LaraLight\EventListener\LaraLightEventListener');
+
+        $this->app->booted(function () {
+            $schedule = $this->app->make(Schedule::class);
+            $schedule->command('laralight:auto_switch_off')->everyMinute();
+        });
     }
 
     /**
@@ -38,11 +44,11 @@ class LaraLightServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('tchoblond59.laralight.console.kernel', function($app) {
+        /*$this->app->singleton('tchoblond59.laralight.console.kernel', function($app) {
             $dispatcher = $app->make(\Illuminate\Contracts\Events\Dispatcher::class);
             return new \Tchoblond59\LaraLight\Console\Kernel($app, $dispatcher);
         });
 
-        $this->app->make('tchoblond59.laralight.console.kernel');
+        $this->app->make('tchoblond59.laralight.console.kernel');*/
     }
 }
