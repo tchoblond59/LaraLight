@@ -171,6 +171,9 @@ class LaraLightController extends Controller
             'mode' => 'required',
             'lux_limit' => 'required|numeric',
             'delay' => 'required|numeric',
+            'level_min' => 'required|numeric|min:0|max:100',
+            'level_max' => 'required|numeric|min:0|max:100',
+            'dimmer_delay' => 'required|numeric|min:0',
             'lux_sensor' => 'required|exists:sensors,id',
             'pir_sensor' => 'required|exists:sensors,id',
         ]);
@@ -182,9 +185,15 @@ class LaraLightController extends Controller
         $config->delay = $request->delay;
         $config->light_sensor_id = $request->lux_sensor;
         $config->pir_sensor_id = $request->pir_sensor;
+        $config->level_min = $request->level_min;
+        $config->level_max = $request->level_max;
+        $config->dimmer_delay= $request->dimmer_delay;
+        $config->enable_delay = $request->has('enable_delay') ? true : false;
         $config->save();
         $event = new LaraLightEvent($sensor, $config->state, $config);
         event($event);
+        $sensor = LaraLight::find($sensor->id);
+        $sensor->sendConfig();
         return redirect()->back();
     }
 

@@ -115,4 +115,28 @@ class LaraLight extends Sensor
             $this->setLevel($light_level);
         }
     }
+
+    /*Send the config to hardware*/
+    public function sendConfig()
+    {
+        $config = $this->config;
+        $message = new MSMessage($this->id);
+
+        $message->set($this->node_address, $this->sensor_address, 'V_VAR1',0);
+        $message->setMessage($config->dimmer_delay);
+        MqttSender::sendMessage($message);
+
+        usleep(1000*10);
+        $message->set($this->node_address, $this->sensor_address, 'V_VAR2',0);
+        $message->setMessage($config->level_min);
+        MqttSender::sendMessage($message);
+        usleep(1000*10);
+        $message->set($this->node_address, $this->sensor_address, 'V_VAR3',0);
+        $message->setMessage($config->level_max);
+        MqttSender::sendMessage($message);
+        usleep(1000*10);
+        $message->set($this->node_address, $this->sensor_address, 'V_VAR4',0);
+        $message->setMessage($config->enable_delay);
+        MqttSender::sendMessage($message);
+    }
 }

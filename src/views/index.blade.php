@@ -6,140 +6,201 @@
             <h1>Configuration du capteur {{$widget->sensor->name}}</h1>
         </div>
         <div class="row">
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-        </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <form class="form-horizontal" method="post" action="{{url('LaraLight/widget/configuration/'.$widget->id)}}">
-                        {{csrf_field()}}
-                        <fieldset>
-
-                            <!-- Form Name -->
-                            <legend></legend>
-
-                            <!-- Select Basic -->
-                            <div class="form-group row">
-                                <label class="col-md-3 col-form-label" for="mode">Mode</label>
-                                <div class="col-md-4">
-                                    <select id="mode" name="mode" class="form-control">
-                                        @if($ll_config->mode == \Tchoblond59\LaraLight\Models\LaraLightMode::Manual)
-                                            <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::Manual}}" selected>Manuel</option>
-                                        @else
-                                            <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::Manual}}">Manuel</option>
-                                        @endif
-                                        @if($ll_config->mode == \Tchoblond59\LaraLight\Models\LaraLightMode::Auto)
-                                            <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::Auto}}" selected>Automatique</option>
-                                        @else
-                                            <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::Auto}}">Automatique</option>
-                                        @endif
-                                        @if($ll_config->mode == \Tchoblond59\LaraLight\Models\LaraLightMode::TimeOnly)
-                                            <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::TimeOnly}}" selected>Basé sur l'heure de la journée</option>
-                                        @else
-                                            <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::TimeOnly}}">Basé sur l'heure de la journée</option>
-                                        @endif
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Text input-->
-                            <div class="form-group row">
-                                <label class="col-md-3 col-form-label" for="lux_limit">Lux Limit</label>
-                                <div class="col-md-4">
-                                    <input id="lux_limit" name="lux_limit" placeholder="250" class="form-control input-md" type="number" value="{{$ll_config->lux_limit}}">
-                                    <span class="help-block">Limite de lux à partir de laquelle la lumière doit s'allumer</span>
-                                </div>
-                            </div>
-
-                            <!-- Text input-->
-                            <div class="form-group row">
-                                <label class="col-md-3 col-form-label" for="delay">Délai</label>
-                                <div class="col-md-4">
-                                    <input id="delay" name="delay" placeholder="1" class="form-control input-md" type="number" value="{{$ll_config->delay}}">
-                                    <span class="help-block">Délai en minutes avant lequel la lumière s'eteint</span>
-                                </div>
-                            </div>
-
-                            <!-- Select Basic -->
-                            <div class="form-group row">
-                                <label class="col-md-3 col-form-label" for="lux_sensor">Capteur de lumière</label>
-                                <div class="col-md-4">
-                                    <select id="lux_sensor" name="lux_sensor" class="form-control">
-                                        @foreach(\App\Sensor::all() as $ze_sensor)
-                                            @if($ze_sensor->id == $ll_config->light_sensor_id)
-                                                <option value="{{$ze_sensor->id}}" selected>{{$ze_sensor->name}}</option>
-                                            @else
-                                                <option value="{{$ze_sensor->id}}">{{$ze_sensor->name}}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Select Basic -->
-                            <div class="form-group row">
-                                <label class="col-md-3 col-form-label" for="pir_sensor">Capteur de mouvement</label>
-                                <div class="col-md-4">
-                                    <select id="pir_sensor" name="pir_sensor" class="form-control">
-                                        @foreach(\App\Sensor::all() as $ze_sensor)
-                                            @if($ze_sensor->id == $ll_config->pir_sensor_id)
-                                                <option value="{{$ze_sensor->id}}" selected>{{$ze_sensor->name}}</option>
-                                            @else
-                                                <option value="{{$ze_sensor->id}}">{{$ze_sensor->name}}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-offset-4 col-md-4 control-label">
-                                <button class="btn btn-default">Valider</button>
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
-            </div>
-
-            <hr>
-            <div class="row">
-                <div class="col-md-12">
-                    <h1>Configuration des périodes</h1>
-                    <ul class="nav nav-tabs">
-                        <li class="{{ $state=='config' ? 'active' : '' }} nav-link"><a
-                                    href="{{url('LaraLight/widget/'.$widget->id)}}">LaraLight</a></li>
-                        <li class="{{ $state=='periods' ? 'active' : '' }} nav-link"><a
-                                    href="{{url('LaraLight/widget/period/'.$widget->id)}}">Periode</a></li>
-                        <li class="{{ $state=='periods_configs' ? 'active' : '' }} nav-link"><a
-                                    href="{{url('LaraLight/widget/periodConfig/'.$widget->id)}}">Assignation période</a>
-                        </li>
-                        <li role="presentation" class="dropdown nav-link">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
-                               aria-haspopup="true" aria-expanded="false">
-                                Créer <span class="caret"></span>
-                            </a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalLumiere">Lumière</a>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalPeriod">Période</a>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalAssignPeriod">Assigner
-                                        Période</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="row" style="margin-top: 20px;">
-                <div class="col-md-12">
-                    @include($sub_view)
-                </div>
+            <div class="col-12">
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <form class="form-horizontal" method="post"
+                      action="{{url('LaraLight/widget/configuration/'.$widget->id)}}">
+                    {{csrf_field()}}
+                    <fieldset>
+
+                        <!-- Form Name -->
+                        <legend></legend>
+
+                        <!-- Select Basic -->
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="mode">Mode</label>
+                            <div class="col-md-4">
+                                <select id="mode" name="mode" class="form-control">
+                                    @if($ll_config->mode == \Tchoblond59\LaraLight\Models\LaraLightMode::Manual)
+                                        <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::Manual}}"
+                                                selected>Manuel
+                                        </option>
+                                    @else
+                                        <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::Manual}}">Manuel
+                                        </option>
+                                    @endif
+                                    @if($ll_config->mode == \Tchoblond59\LaraLight\Models\LaraLightMode::Auto)
+                                        <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::Auto}}" selected>
+                                            Automatique
+                                        </option>
+                                    @else
+                                        <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::Auto}}">
+                                            Automatique
+                                        </option>
+                                    @endif
+                                    @if($ll_config->mode == \Tchoblond59\LaraLight\Models\LaraLightMode::TimeOnly)
+                                        <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::TimeOnly}}"
+                                                selected>Basé sur l'heure de la journée
+                                        </option>
+                                    @else
+                                        <option value="{{\Tchoblond59\LaraLight\Models\LaraLightMode::TimeOnly}}">Basé
+                                            sur l'heure de la journée
+                                        </option>
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Text input-->
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="lux_limit">Lux Limit</label>
+                            <div class="col-md-4">
+                                <input id="lux_limit" name="lux_limit" placeholder="250" class="form-control input-md"
+                                       type="number" value="{{$ll_config->lux_limit}}">
+                                <span class="help-block">Limite de lux à partir de laquelle la lumière doit s'allumer</span>
+                            </div>
+                        </div>
+
+                        <!-- Text input-->
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="delay">Délai</label>
+                            <div class="col-md-4">
+                                <input id="delay" name="delay" placeholder="1" class="form-control input-md"
+                                       type="number" value="{{$ll_config->delay}}">
+                                <span class="help-block">Délai en minutes avant lequel la lumière s'eteint</span>
+                            </div>
+                        </div>
+
+                        <!-- Select Basic -->
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="lux_sensor">Capteur de lumière</label>
+                            <div class="col-md-4">
+                                <select id="lux_sensor" name="lux_sensor" class="form-control">
+                                    @foreach(\App\Sensor::all() as $ze_sensor)
+                                        @if($ze_sensor->id == $ll_config->light_sensor_id)
+                                            <option value="{{$ze_sensor->id}}" selected>{{$ze_sensor->name}}</option>
+                                        @else
+                                            <option value="{{$ze_sensor->id}}">{{$ze_sensor->name}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Select Basic -->
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="pir_sensor">Capteur de mouvement</label>
+                            <div class="col-md-4">
+                                <select id="pir_sensor" name="pir_sensor" class="form-control">
+                                    @foreach(\App\Sensor::all() as $ze_sensor)
+                                        @if($ze_sensor->id == $ll_config->pir_sensor_id)
+                                            <option value="{{$ze_sensor->id}}" selected>{{$ze_sensor->name}}</option>
+                                        @else
+                                            <option value="{{$ze_sensor->id}}">{{$ze_sensor->name}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Text input-->
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="level_min">Niveau minimum</label>
+                            <div class="col-md-4">
+                                <input id="level_min" name="level_min" placeholder="1" class="form-control input-md"
+                                       type="number" value="{{$ll_config->level_min}}">
+                                <span class="help-block">Ex: Si le niveau minimum est de 10 alors lorsque la commande sera en dessous 10% la lumière sera a 10%</span>
+                            </div>
+                        </div>
+
+                        <!-- Text input-->
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="level_max">Niveau maximum</label>
+                            <div class="col-md-4">
+                                <input id="level_max" name="level_max" placeholder="1" class="form-control input-md"
+                                       type="number" value="{{$ll_config->level_max}}">
+                                <span class="help-block">Ex: Si le niveau maximum est de 90 alors lorsque la commande sera au dessus de 90% la lumière sera a 90%</span>
+                            </div>
+                        </div>
+
+                        <!-- Text input-->
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="dimmer_delay">Délai transition</label>
+                            <div class="col-md-4">
+                                <input id="dimmer_delay" name="dimmer_delay" placeholder="1"
+                                       class="form-control input-md" type="number" value="{{$ll_config->dimmer_delay}}">
+                                <span class="help-block">Temps pour passer de 0 à 100% en secondes</span>
+                            </div>
+                        </div>
+
+                        <!-- Text input-->
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="enable_delay">Fonction délai</label>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" name="enable_delay"
+                                           id="enable_delay" {{$ll_config->enable_delay ? "checked" : ""}}>
+                                    <label class="form-check-label" for="enable_delay">Activer ou désactiver</label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-7">
+                            <button class="btn btn-secondary float-right">Valider</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
+        <hr>
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Configuration des périodes</h1>
+                <ul class="nav nav-tabs">
+                    <li class="{{ $state=='config' ? 'active' : '' }} nav-link"><a
+                                href="{{url('LaraLight/widget/'.$widget->id)}}">LaraLight</a></li>
+                    <li class="{{ $state=='periods' ? 'active' : '' }} nav-link"><a
+                                href="{{url('LaraLight/widget/period/'.$widget->id)}}">Periode</a></li>
+                    <li class="{{ $state=='periods_configs' ? 'active' : '' }} nav-link"><a
+                                href="{{url('LaraLight/widget/periodConfig/'.$widget->id)}}">Assignation période</a>
+                    </li>
+                    <li role="presentation" class="dropdown nav-link">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                           aria-haspopup="true" aria-expanded="false">
+                            Créer <span class="caret"></span>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" data-toggle="modal"
+                               data-target="#modalLumiere">Lumière</a>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalPeriod">Période</a>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalAssignPeriod">Assigner
+                                Période</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-md-12">
+                @include($sub_view)
+            </div>
+        </div>
+    </div>
     </div>
     <div class="modal fade" tabindex="-1" role="dialog" id="modalLumiere">
         <div class="modal-dialog" role="document">
