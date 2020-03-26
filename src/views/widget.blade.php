@@ -38,6 +38,7 @@
                 <input type="hidden" name="id" value="{{$widget->id}}">
                 <input type="hidden" name="sensor_id" value="{{$sensor->id}}">
                 <input type="hidden" name="level" value="0">
+                <input type="hidden" name="force" value="true">
             </form>
             <form action="{{url('/LaraLight/action/setLevel')}}" method="post"
                   id="laralight_open_{{$widget->id}}">
@@ -45,6 +46,7 @@
                 <input type="hidden" name="id" value="{{$widget->id}}">
                 <input type="hidden" name="sensor_id" value="{{$sensor->id}}">
                 <input type="hidden" name="level" value="100">
+                <input type="hidden" name="force" value="true">
             </form>
         </div>
     </div>

@@ -151,17 +151,15 @@ class LaraLightController extends Controller
         $this->validate($request, [
             'id' => 'required|exists:widgets',
             'sensor_id' => 'required|exists:sensors,id',
-            'level' => 'required|min:0|max:100'
+            'level' => 'required|min:0|max:100',
         ]);
         $widget = Widget::findOrFail($request->id);
         $sensor = LaraLight::findOrFail($widget->sensor_id);
-        /*$message = new MSMessage($sensor->id);
-        $message->set($sensor->node_address, $sensor->sensor_address, 'V_PERCENTAGE',1);
-        $message->setMessage($request->level);
-        MqttSender::sendMessage($message);
-        $event = new LaraLightEvent($sensor, $request->level);
-        event($event);*/
-        $sensor->setLevel($request->level);
+        if($request->has('force') && $request->force == true)
+            $sensor->setLevel($request->level, true);
+        else
+            $sensor->setLevel($request->level);
+
         return json_encode($request->all());
     }
 

@@ -62,11 +62,16 @@ class LaraLight extends Sensor
 
     }
 
-    public function setLevel($level)
+    public function setLevel($level, $force=false)
     {
         \Log::info('Set light level to '.$level.' for sensor '.$this->name);
+        $type = 'V_PERCENTAGE';
+        if($force)
+        {
+            $type = 'V_STATUS';
+        }
         $message = new MSMessage($this->id);
-        $message->set($this->node_address, $this->sensor_address, 'V_PERCENTAGE',1);
+        $message->set($this->node_address, $this->sensor_address, $type,1);
         $message->setMessage($level);
         MqttSender::sendMessage($message);
 
