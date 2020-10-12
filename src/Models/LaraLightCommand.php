@@ -24,7 +24,7 @@ class LaraLightCommand extends Model implements CommandInterface
             $lights = LaraLight::where('classname', '\Tchoblond59\LaraLight\Models\LaraLight')->get();
             foreach ($lights as $light)
             {
-                $light->setLevel(0);
+                $light->setLevel(100);
             }
         }
     }
