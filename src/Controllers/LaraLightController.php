@@ -2,6 +2,7 @@
 
 namespace Tchoblond59\LaraLight\Controllers;
 
+use App\Command;
 use App\Http\Controllers\Controller;
 
 use App\ScheduledMSCommands;
@@ -15,6 +16,7 @@ use App\Message;
 use App\MSCommand;
 use Tchoblond59\LaraLight\Events\LaraLightEvent;
 use Tchoblond59\LaraLight\Models\LaraLight;
+use Tchoblond59\LaraLight\Models\LaraLightCommand;
 use Tchoblond59\LaraLight\Models\LaraLightConfig;
 use Tchoblond59\LaraLight\Models\LaraLightMode;
 use Tchoblond59\LaraLight\Models\Period;
@@ -45,7 +47,7 @@ class LaraLightController extends Controller
             'laralight_configs' => $laralight_configs,
             'sub_view' => $sub_view,
             'state' => $state,
-            'll_config' => $config
+            'll_config' => $config,
             ]);
     }
 
@@ -216,5 +218,24 @@ class LaraLightController extends Controller
         $event = new LaraLightEvent($sensor, $config->state, $config);
         event($event);
         return json_encode('ok');
+    }
+
+    public function createCommand(Request $request)
+    {
+        $this->validate($request, [
+            'sensor' => 'nullable|exists:sensors,id'
+        ]);
+
+        $ll_command = LaraLightCommand::create([
+            'type' => $request->type,
+            'sensor_id' => $request->sensor,
+            'value' => $request->value,
+        ]);
+        Command::create([
+            'name' => $request->name,
+            'commandable_type' => '\Tchoblond59\LaraLight\Models\LaraLightCommand',
+            'commandable_id' => $ll_command->id,
+        ]);
+        return redirect()->back();
     }
 }

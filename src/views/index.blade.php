@@ -190,6 +190,8 @@
                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalPeriod">Période</a>
                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalAssignPeriod">Assigner
                                 Période</a>
+                            <a class="dropdown-item" href="#" data-toggle="modal"
+                               data-target="#modalCommand">Commandes</a>
                         </div>
                     </li>
                 </ul>
@@ -316,6 +318,50 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary" form="modalAssignPeriodForm">Ajouter</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalCommand">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Créer une commande</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{{url('/LaraLight/config/createCommand')}}" id="formModalCommand">
+                        {{csrf_field()}}
+                        <div class="form-group">
+                            <label>Nom de la commande:</label>
+                            <input class="form-control" name="name" type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Type:</label>
+                            <select class="form-control" name="type">
+                                <option value="SWITCH_OFF_ALL">Tout éteindre</option>
+                                <option value="SWITCH_ON_ALL">Tout allumer</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Sensor:</label>
+                            <select class="form-control" name="sensor">
+                                @foreach (\Tchoblond59\LaraLight\Models\LaraLight::where('classname', '\Tchoblond59\LaraLight\Models\LaraLight')->get() as $light)
+                                    <option value="{{$light->id}}">{{$light->name}}</option>
+                                @endforeach
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Value:</label>
+                            <input class="form-control" name="value" type="number" value="0">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" form="formModalCommand">Ajouter</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
