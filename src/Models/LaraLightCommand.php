@@ -11,7 +11,7 @@ class LaraLightCommand extends Model implements CommandInterface
     protected $guarded = ['created_at', 'updated_at'];
     public function play()
     {
-        if($this->type = 'SWITCH_OFF_ALL')
+        if($this->type == 'SWITCH_OFF_ALL')
         {
             $lights = LaraLight::where('classname', '\Tchoblond59\LaraLight\Models\LaraLight')->get();
             foreach ($lights as $light)
@@ -19,7 +19,7 @@ class LaraLightCommand extends Model implements CommandInterface
                 $light->setLevel(0);
             }
         }
-        else if($this->type = 'SWITCH_ON_ALL')
+        else if($this->type == 'SWITCH_ON_ALL')
         {
             $lights = LaraLight::where('classname', '\Tchoblond59\LaraLight\Models\LaraLight')->get();
             foreach ($lights as $light)
