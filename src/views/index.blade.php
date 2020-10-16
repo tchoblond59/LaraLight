@@ -342,6 +342,7 @@
                             <select class="form-control" name="type">
                                 <option value="SWITCH_OFF_ALL">Tout éteindre</option>
                                 <option value="SWITCH_ON_ALL">Tout allumer</option>
+                                <option value="SET_LEVEL">Régler sur la valeur</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -354,7 +355,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Value:</label>
+                            <label>Valeur:</label>
                             <input class="form-control" name="value" type="number" value="0">
                         </div>
                     </form>

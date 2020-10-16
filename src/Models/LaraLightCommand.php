@@ -27,6 +27,11 @@ class LaraLightCommand extends Model implements CommandInterface
                 $light->setLevel(100);
             }
         }
+        else if($this->type == 'SET_LEVEL')
+        {
+            $light = LaraLight::find($this->sensor_id);
+            $light->setLevel($this->value);
+        }
     }
 
     public function sensor()
