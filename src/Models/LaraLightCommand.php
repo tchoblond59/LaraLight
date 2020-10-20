@@ -17,6 +17,7 @@ class LaraLightCommand extends Model implements CommandInterface
             foreach ($lights as $light)
             {
                 $light->setLevel(0);
+                usleep(250*1000);
             }
         }
         else if($this->type == 'SWITCH_ON_ALL')
@@ -25,6 +26,7 @@ class LaraLightCommand extends Model implements CommandInterface
             foreach ($lights as $light)
             {
                 $light->setLevel(100);
+                usleep(250*1000);
             }
         }
         else if($this->type == 'SET_LEVEL')
