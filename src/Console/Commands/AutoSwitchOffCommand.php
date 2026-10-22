@@ -54,8 +54,11 @@ class AutoSwitchOffCommand extends Command
             ->get();
         foreach ($ll_configs as $config)
         {
+            if ($config->on_since === null) {
+                continue;
+            }
             $now = Carbon::now();
-            $diff_in_minutes = $now->diffInMinutes($config->on_since);
+            $diff_in_minutes = $config->on_since->diffInMinutes($now, false);
 
             if($diff_in_minutes>=$config->delay)//Delay is passed from last detection
             {

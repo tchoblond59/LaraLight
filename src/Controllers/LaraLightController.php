@@ -147,13 +147,13 @@ class LaraLightController extends Controller
 
         return redirect()->back();
     }
-    
+
     public function setLevel(Request $request)
     {
         $this->validate($request, [
             'id' => 'required|exists:widgets',
             'sensor_id' => 'required|exists:sensors,id',
-            'level' => 'required|min:0|max:100',
+            'level' => 'required|numeric|min:0|max:100',
         ]);
         $widget = Widget::findOrFail($request->id);
         $sensor = LaraLight::findOrFail($widget->sensor_id);

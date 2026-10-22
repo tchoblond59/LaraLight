@@ -1,7 +1,7 @@
 {
     "name": "tchoblond59/laralight",
     "description": "Auto switch on light system for LaraHome",
-    "type": "LaraHome",
+    "type": "library",
     "license": "GPL-3.0-or-later",
     "authors": [
         {
@@ -14,13 +14,18 @@
             "Tchoblond59\\LaraLight\\": "src"
         }
     },
-    "require": {},
+    "require": {
+        "php": "~8.5.12",
+        "laravel/framework": "^12.0"
+    },
     "extra": {
-	"laravel": {
-	    "providers": [
-		"Tchoblond59\\LaraLight\\LaraLightServiceProvider"
-	    ]
-	}
+        "laravel": {
+            "providers": [
+                "Tchoblond59\\LaraLight\\LaraLightServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "test": "bash tools/test"
     }
-
 }

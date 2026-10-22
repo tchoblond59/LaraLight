@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+plugin_root="$(cd "$(dirname "$0")/.." && pwd)"
+host_root="${LARAHOME_PATH:-$(dirname "$plugin_root")/LaraHome}"
+exec docker run --rm --user "$(id -u):$(id -g)" --network "${MIGRATION_NETWORK:-none}"   -e DB_CONNECTION="${PLUGIN_TEST_DB_CONNECTION:-sqlite}" \
+  -e DB_HOST="${PLUGIN_TEST_DB_HOST:-127.0.0.1}" \
+  -e DB_DATABASE="${PLUGIN_TEST_DB_DATABASE:-:memory:}" \
+  -e DB_USERNAME="${PLUGIN_TEST_DB_USERNAME:-migration}" \
+  -e DB_PASSWORD="${PLUGIN_TEST_DB_PASSWORD:-}" \
+  -e LARAHOME_PATH=/app -v "$host_root:/app" -v "$plugin_root:/plugin:ro"   -w /app larahome-migration:php85 php vendor/bin/phpunit -c /plugin/phpunit.xml "$@"

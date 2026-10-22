@@ -14,7 +14,7 @@ class LaraLightConfig extends Model
 
     private $lux = 0;
 
-    protected $dates = ['on_since'];
+    protected $casts = ['on_since' => 'datetime'];
 
     public function sensor()
     {
